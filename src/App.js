@@ -1,10 +1,9 @@
-import React from "react";
-import SellerAdminPage from "./AdminPage";
+import React from 'react';
+import Header from './Components/Header/Header'
 function App() {
   return (
     <div>
-      <SellerAdminPage></SellerAdminPage>
-    
+      <Header/>
     </div>
   );
 }
