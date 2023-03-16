@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "../UI/Card";
 import styles from "./AvailableMeals.module.css";
+import MealsForm from "./MealsForm";
 
 const MEALS_DATA = [
   {
@@ -37,6 +38,7 @@ const MealItem = ({ name, description, price }) => {
         <div>{description}</div>
       </div>
       <div className={styles["meal-item__price"]}>{`$${price.toFixed(2)}`}</div>
+      <div><MealsForm/></div>
     </li>
   );
 };
