@@ -1,17 +1,16 @@
-import React from "react";
-import Card from "../UI/Card";
-import styles from "./AvailableMeals.module.css";
-import MealsForm from "./MealsForm";
+import Card from '../UI/Card';
+import MealItem from './MealItem';
+import classes from './AvailableMeals.module.css';
 
-const MEALS_DATA = [
+const DUMMY_MEALS = [
   {
-    id: 'm3',
-    name: 'Sushii5i',
+    id: 'm1',
+    name: 'Sushi',
     description: 'Finest fish and veggies',
-    price: 22.9,
+    price: 22.99,
   },
   {
-    id: 'n2',
+    id: 'm2',
     name: 'Schnitzel',
     description: 'A german specialty!',
     price: 16.5,
@@ -27,37 +26,26 @@ const MEALS_DATA = [
     name: 'Green Bowl',
     description: 'Healthy...and green...',
     price: 18.99,
-  },
-];
+  },];
 
-const MealItem = ({ name, description, price }) => {
-  return (
-    <li className={styles["meal-item"]}>
-      <div className={styles["meal-item__description"]}>
-        <h3>{name}</h3>
-        <div>{description}</div>
-      </div>
-      <div className={styles["meal-item__price"]}>{`$${price.toFixed(2)}`}</div>
-      <div><MealsForm/></div>
-    </li>
-  );
-};
-
-const AvailableMeals = () => {
-  return (
-    <Card>
-    <ul className={styles["meals-container"]}>
-      {MEALS_DATA.map((meal) => (
-        <MealItem
-          key={meal.id}
-          name={meal.name}
-          description={meal.description}
-          price={meal.price}
-        />
-      ))}
-    </ul>
-    </Card>
-  );
-};
-
-export default AvailableMeals;  
+  const AvailableMeals = () => {
+    const mealsList = DUMMY_MEALS.map((meal) => (
+      <MealItem
+        key={meal.id}
+        id={meal.id}
+        name={meal.name}
+        description={meal.description}
+        price={meal.price}
+      />
+    ));
+  
+    return (
+      <section className={classes.meals}>
+        <Card>
+          <ul>{mealsList}</ul>
+        </Card>
+      </section>
+    );
+  };
+  
+  export default AvailableMeals;
