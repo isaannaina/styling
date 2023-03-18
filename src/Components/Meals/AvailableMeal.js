@@ -5,13 +5,13 @@ import MealsForm from "./MealsForm";
 
 const MEALS_DATA = [
   {
-    id: 'm1',
-    name: 'Sushi',
+    id: 'm3',
+    name: 'Sushii5i',
     description: 'Finest fish and veggies',
-    price: 22.99,
+    price: 22.9,
   },
   {
-    id: 'm2',
+    id: 'n2',
     name: 'Schnitzel',
     description: 'A german specialty!',
     price: 16.5,

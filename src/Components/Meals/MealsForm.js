@@ -7,7 +7,7 @@ const MealsForm=(props)=>{
                 id:'amount',
                 type:'number',
                 min:'1',
-                max:'5',
+                max:'4',
                 step:'1',
                 defaultValue:'1'
             }} />
