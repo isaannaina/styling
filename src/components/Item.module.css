@@ -1,0 +1,45 @@
+/* Item.css */
+
+.item {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .itemtitle {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .itemdescription {
+    margin-bottom: 10px;
+  }
+  
+  .itemprice {
+    margin-bottom: 10px;
+  }
+  
+  .item-size {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .size-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  .size-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .size-label {
+    font-size: 14px;
+  }
+  
