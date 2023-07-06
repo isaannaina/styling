@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom';
 import React from 'react';
 import CartButton from './CartButton';
 
 const Header = ({ cartItemCount, handleCartToggle }) => {
   return (
-    <header className="bg-dark">
+    <header className="bg-dark ">
       <nav className="navbar navbar-expand-lg navbar-dark">
         <div className="container">
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,16 +13,16 @@ const Header = ({ cartItemCount, handleCartToggle }) => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <a className="navbar-brand" href="#">Home</a>
+                <Link to ="/" className="navbar-brand">Home</Link>
               </li>
               <li className="nav-item">
-                <a className="navbar-brand" href="#">Store</a>
+                <Link to="#" className="navbar-brand">Store</Link>
               </li>
               <li className="nav-item">
-                <a className="navbar-brand" href="#">Bestselling</a>
+                <Link to ="#" className="navbar-brand">Bestselling</Link>
               </li>
               <li className="nav-item">
-                <a className="navbar-brand" href="#">About Us</a>
+                <Link to="/product" className="navbar-brand">About Us</Link>
               </li>
             </ul>
             <ul className="navbar-nav ml-auto">
