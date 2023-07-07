@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import ProductItem from './ProductItem';
-
+import ProductItem from './ProductItem'
 const ProductsScreen = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [movies, setMovies] = useState([]);
 
   const fetchMovieData = () => {
+    setIsLoading(true);
+
     fetch("https://swapi.dev/api/films/")
       .then(response => response.json())
       .then(data => {
         setMovies(data.results);
+        setIsLoading(false);
       })
       .catch(error => {
         console.log("Error fetching movies:", error);
+        setIsLoading(false);
       });
   };
 
@@ -20,11 +24,15 @@ const ProductsScreen = () => {
       <button onClick={fetchMovieData} className="btn btn-primary">
         Fetch Movies
       </button>
-      <div className="product-list">
-        {movies.map((movie, index) => (
-          <ProductItem key={index} movie={movie} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="loader">Loading...</div>
+      ) : (
+        <div className="product-list">
+          {movies.map((movie, index) => (
+            <ProductItem key={index} movie={movie} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
