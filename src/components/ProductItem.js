@@ -1,26 +1,14 @@
 import React from 'react';
 
-const ProductItem = ({ product, handleAddToCart }) => {
-  const { title, price, imageUrl } = product;
-
-  const handleAddToCartClick = () => {
-    handleAddToCart(product);
-  };
+const ProductItem = ({ movie }) => {
+  const { title, episode_id } = movie;
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-6">
-          <img src={imageUrl} alt={title} className="product-image" />
-        </div>
-        <div className="col-md-6">
-          <h3 className="product-title">{title}</h3>
-          <p className="product-price">Price: ${price}</p>
-          <button className="btn btn-primary" onClick={handleAddToCartClick}>Add to Cart</button>
-        </div>
-      </div>
+    <div>
+      <h3>{title}</h3>
+      <p>Episode ID: {episode_id}</p>
     </div>
   );
-}
+};
 
 export default ProductItem;
