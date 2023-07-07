@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import ProductItem from './ProductItem';
 
 const ProductsScreen = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
   const [retryIntervalId, setRetryIntervalId] = useState(null);
 
-  const fetchMovieData = () => {
+  const fetchMovieData = useCallback(() => {
     setIsLoading(true);
     setError(null);
     setRetryCount(0);
@@ -26,24 +26,31 @@ const ProductsScreen = () => {
         setError('Something went wrong. Retrying...');
         setRetryIntervalId(setInterval(fetchMovieData, 5000));
       });
-  };
+  }, []);
 
-  const cancelRetry = () => {
+  const cancelRetry = useCallback(() => {
     clearInterval(retryIntervalId);
     setError(null);
-  };
+  }, [retryIntervalId]);
 
   useEffect(() => {
+    fetchMovieData();
+
     return () => {
       clearInterval(retryIntervalId);
     };
-  }, [retryIntervalId]);
+  }, [fetchMovieData, retryIntervalId]);
+
+  const movieList = useMemo(() => (
+    <div className="product-list">
+      {movies.map((movie, index) => (
+        <ProductItem key={index} movie={movie} />
+      ))}
+    </div>
+  ), [movies]);
 
   return (
     <div>
-      <button onClick={fetchMovieData} className="btn btn-primary">
-        Fetch Movies
-      </button>
       {isLoading ? (
         <div className="loader">Loading...</div>
       ) : error ? (
@@ -53,13 +60,7 @@ const ProductsScreen = () => {
             Cancel
           </button>
         </div>
-      ) : (
-        <div className="product-list">
-          {movies.map((movie, index) => (
-            <ProductItem key={index} movie={movie} />
-          ))}
-        </div>
-      )}
+      ) : movieList}
     </div>
   );
 };
