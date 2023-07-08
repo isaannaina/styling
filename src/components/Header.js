@@ -19,7 +19,7 @@ const Header = ({ cartItemCount, handleCartToggle }) => {
                 <Link to="#" className="navbar-brand">Store</Link>
               </li>
               <li className="nav-item">
-                <Link to ="#" className="navbar-brand">Bestselling</Link>
+                <Link to ="contact" className="navbar-brand">ContactUs</Link>
               </li>
               <li className="nav-item">
                 <Link to="/product" className="navbar-brand">About Us</Link>
