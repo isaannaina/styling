@@ -1,12 +1,14 @@
 import React from 'react';
 
-const ProductItem = ({ movie }) => {
-  const { title, episode_id } = movie;
+const ProductItem = ({ movie, deleteMovie }) => {
+  const handleDeleteClick = () => {
+    deleteMovie(movie.id);
+  };
 
   return (
     <div>
-      <h3>{title}</h3>
-      <p>Episode ID: {episode_id}</p>
+      <h3>{movie.title}</h3>
+      <button onClick={handleDeleteClick}>Delete Movie</button>
     </div>
   );
 };

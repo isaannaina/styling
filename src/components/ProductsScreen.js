@@ -98,12 +98,18 @@ const ProductsScreen = () => {
       });
   };
 
+  const deleteMovie = (id) => {
+    // Make an API call or perform a database operation to delete the movie with the given ID
+    // After successful deletion, update the UI by removing the movie from the movies state
+    setMovies(prevMovies => prevMovies.filter(movie => movie.id !== id));
+  };
+
   const cancelRetry = () => {
     clearInterval(retryIntervalId);
     setError(null);
   };
 
-  const handleAddMovie = newMovie => {
+  const handleAddMovie = (newMovie) => {
     console.log(newMovie);
   };
 
@@ -124,8 +130,12 @@ const ProductsScreen = () => {
         </div>
       ) : (
         <div className="product-list">
-          {movies.map((movie, index) => (
-            <ProductItem key={index} movie={movie} />
+          {movies.map(movie => (
+            <ProductItem
+              key={movie.id}
+              movie={movie}
+              deleteMovie={deleteMovie}
+            />
           ))}
         </div>
       )}
