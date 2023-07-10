@@ -86,7 +86,7 @@ const AuthForm = () => {
         <button
           type='button'
           className={classes.toggle}
-          onClick={switchAuthModeHandler}
+          onClick={switchAuthModeHandler} 
         >
           {isLogin ? 'Create new account' : 'Login with existing account'}
         </button>
