@@ -1,9 +1,12 @@
-import { useState, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
+import AuthContext from './AuthContext';
+
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [isLoading, setIsLoading] = useState(false); // Add isLoading state
+  const [isLoading, setIsLoading] = useState(false);
+  const authCtx = useContext(AuthContext);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -15,7 +18,7 @@ const AuthForm = () => {
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
 
-    setIsLoading(true); // Show loader when submitting the form
+    setIsLoading(true);
 
     try {
       const response = await fetch(
@@ -40,15 +43,15 @@ const AuthForm = () => {
       }
 
       const data = await response.json();
-      console.log(data); // Handle the response data as per your requirement
+      authCtx.login(data.idToken);
 
-      setIsLoading(false); // Hide the loader
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
-      setIsLoading(false); // Hide the loader
+      setIsLoading(false);
     }
 
-    emailInputRef.current.value = ''; // Reset form fields
+    emailInputRef.current.value = '';
     passwordInputRef.current.value = '';
   };
 
@@ -74,11 +77,9 @@ const AuthForm = () => {
         </div>
         <div className={classes.actions}>
           {!isLoading ? (
-            <button type='submit'>
-              {isLogin ? 'Login' : 'Sign Up'}
-            </button>
+            <button type='submit'>{isLogin ? 'Login' : 'Sign Up'}</button>
           ) : (
-            <p  >Loading...</p>
+            <p>Loading...</p>
           )}
         </div>
       </form>
@@ -86,7 +87,7 @@ const AuthForm = () => {
         <button
           type='button'
           className={classes.toggle}
-          onClick={switchAuthModeHandler} 
+          onClick={switchAuthModeHandler}
         >
           {isLogin ? 'Create new account' : 'Login with existing account'}
         </button>
@@ -96,3 +97,4 @@ const AuthForm = () => {
 };
 
 export default AuthForm;
+
