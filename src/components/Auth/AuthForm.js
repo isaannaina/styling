@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useRef, useState, useEffect } from 'react';
 import AuthContext from './AuthContext';
 
 import classes from './AuthForm.module.css';
@@ -43,7 +43,13 @@ const AuthForm = () => {
       }
 
       const data = await response.json();
-      authCtx.login(data.idToken);
+      const expirationTime = new Date(
+        new Date().getTime() + parseInt(data.expiresIn) * 1000
+      );
+      authCtx.login(data.idToken, expirationTime);
+
+      localStorage.setItem('token', data.idToken);
+      localStorage.setItem('expirationTime', expirationTime.toISOString());
 
       setIsLoading(false);
     } catch (error) {
@@ -57,6 +63,30 @@ const AuthForm = () => {
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    const expirationTime = localStorage.getItem('expirationTime');
+    if (storedToken && expirationTime) {
+      const remainingTime = new Date(expirationTime) - new Date();
+      if (remainingTime > 0) {
+    
+        authCtx.login(storedToken, expirationTime);
+      } else {
+
+        localStorage.removeItem('token');
+        localStorage.removeItem('expirationTime');
+        authCtx.logout();
+      }
+    }
+  }, [authCtx]);
+
+  const logoutHandler = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('expirationTime');
+    
+    authCtx.logout();
+  };
 
   return (
     <section className={classes.auth}>
@@ -92,9 +122,22 @@ const AuthForm = () => {
           {isLogin ? 'Create new account' : 'Login with existing account'}
         </button>
       )}
+      {authCtx.token && (
+        <button type='button' className={classes.logout} onClick={logoutHandler}>
+          Logout
+        </button>
+      )}
     </section>
   );
 };
 
 export default AuthForm;
+
+
+
+
+
+
+
+
 
