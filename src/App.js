@@ -1,31 +1,72 @@
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout/Layout';
-import UserProfile from './components/Profile/UserProfile';
-import AuthPage from './pages/AuthPage';
-import HomePage from './pages/HomePage';
-import { AuthContextProvider } from './components/Auth/AuthContext';
 
-function App() {
+import { CartProvider } from './component/CartContext';
+import Header from './component/Header';
+import ProductsScreen from './component/ProductScreen';
+import Cart from './component/Cart';
+import CartPortal from './component/CartPortal';
+import AboutUs from './component/AbooutUs';
+import ProductPage from './component/ProductPage'
+import ContactForm from './component/ContactForm';
+import LoginPage from './component/LogInPage';
+
+const App = () => {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+  //const navigate = useNavigate();
+
+  const handleCartToggle = () => {
+    setIsCartOpen(!isCartOpen);
+  };
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    //navigate('/product');
+  };
+
+  const productsArr = [
+    {
+      title: 'Colors',
+      price: 100,
+      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%201.png',
+    },
+    {
+      title: 'Black and white Colors',
+      price: 50,
+      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%202.png',
+    },
+    {
+      title: 'Yellow and Black Colors',
+      price: 70,
+      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%203.png',
+    },
+    {
+      title: 'Blue Color',
+      price: 100,
+      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%204.png',
+    },
+  ];
+
   return (
-          <BrowserRouter>
-              <AuthContextProvider>
-
-    
-      <Layout>
+    <BrowserRouter>
+      <CartProvider isLoggedIn={isLoggedIn}> 
+        <Header cartItemCount={0} handleCartToggle={handleCartToggle} /> 
+        {isCartOpen && (
+          <CartPortal>
+            <Cart />
+          </CartPortal>
+        )}
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/" element={<ProductsScreen productsArr={productsArr} />} />
+          <Route path="/product/:id" element={<ProductPage productsArr={productsArr} />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactForm />} />
+          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} /> 
         </Routes>
-      </Layout>
-      </AuthContextProvider>
-
+      </CartProvider>
     </BrowserRouter>
-
   );
-}
+};
 
 export default App;
-
-
-
