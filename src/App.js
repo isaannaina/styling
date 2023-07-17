@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { CartProvider } from './component/CartContext';
 import Header from './component/Header';
@@ -7,14 +7,13 @@ import ProductsScreen from './component/ProductScreen';
 import Cart from './component/Cart';
 import CartPortal from './component/CartPortal';
 import AboutUs from './component/AbooutUs';
-import ProductPage from './component/ProductPage'
+import ProductPage from './component/ProductPage';
 import ContactForm from './component/ContactForm';
 import LoginPage from './component/LogInPage';
 
 const App = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
-  //const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleCartToggle = () => {
     setIsCartOpen(!isCartOpen);
@@ -22,7 +21,6 @@ const App = () => {
 
   const handleLogin = () => {
     setIsLoggedIn(true);
-    //navigate('/product');
   };
 
   const productsArr = [
@@ -48,21 +46,25 @@ const App = () => {
     },
   ];
 
+  
   return (
     <BrowserRouter>
-      <CartProvider isLoggedIn={isLoggedIn}> 
-        <Header cartItemCount={0} handleCartToggle={handleCartToggle} /> 
+      <CartProvider isLoggedIn={isLoggedIn}>
+        <Header cartItemCount={0} handleCartToggle={handleCartToggle} />
         {isCartOpen && (
           <CartPortal>
             <Cart />
           </CartPortal>
         )}
         <Routes>
-          <Route path="/" element={<ProductsScreen productsArr={productsArr} />} />
+          <Route
+            path="/"
+             element={isLoggedIn ? <ProductsScreen productsArr={productsArr} /> : <Navigate to="/login" />}
+          />
           <Route path="/product/:id" element={<ProductPage productsArr={productsArr} />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactForm />} />
-          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} /> 
+          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
         </Routes>
       </CartProvider>
     </BrowserRouter>
