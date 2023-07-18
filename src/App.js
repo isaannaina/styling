@@ -1,73 +1,92 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
-import { CartProvider } from './component/CartContext';
+import React, { useState, useEffect, createContext } from 'react';
 import Header from './component/Header';
-import ProductsScreen from './component/ProductScreen';
+import Item from './component/Item';
 import Cart from './component/Cart';
-import CartPortal from './component/CartPortal';
-import AboutUs from './component/AbooutUs';
-import ProductPage from './component/ProductPage';
-import ContactForm from './component/ContactForm';
-import LoginPage from './component/LogInPage';
+
+export const CartContext = createContext();
 
 const App = () => {
+  const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleCartToggle = () => {
+  useEffect(() => {
+    // Fetch cart items from the API on initial render
+    const fetchCartItems = async () => {
+      try {
+        const response = await fetch('https://crudcrud.com/api/8a70c56f12d94429b15c606fa05cbe19/cartItems');
+        if (response.ok) {
+          const data = await response.json();
+          setCartItems(data);
+        } else {
+          console.log('Failed to fetch cart items');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCartItems();
+  }, []);
+
+  useEffect(() => {
+    // Update the API when cart items change
+    const updateCartItems = async () => {
+      try {
+        const response = await fetch('https://crudcrud.com/api/8a70c56f12d94429b15c606fa05cbe19/cartItems', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(cartItems),
+        });
+        if (!response.ok) {
+          console.log('Failed to update cart items');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    updateCartItems();
+  }, [cartItems]);
+
+  const addToCart = (item) => {
+    setCartItems((prevCartItems) => [...prevCartItems, item]);
+  };
+
+  const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
   };
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  const productsArr = [
-    {
-      title: 'Colors',
-      price: 100,
-      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%201.png',
-    },
-    {
-      title: 'Black and white Colors',
-      price: 50,
-      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%202.png',
-    },
-    {
-      title: 'Yellow and Black Colors',
-      price: 70,
-      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%203.png',
-    },
-    {
-      title: 'Blue Color',
-      price: 100,
-      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%204.png',
-    },
-  ];
-
-  
   return (
-    <BrowserRouter>
-      <CartProvider isLoggedIn={isLoggedIn}>
-        <Header cartItemCount={0} handleCartToggle={handleCartToggle} />
-        {isCartOpen && (
-          <CartPortal>
-            <Cart />
-          </CartPortal>
+    <div>
+      <CartContext.Provider value={cartItems}>
+        <Header cartItems={cartItems} toggleCart={toggleCart} />
+        {!isCartOpen && (
+          <>
+            <Item
+              name="T-Shirt 1"
+              description="winter t shirt"
+              price={19.99}
+              addToCart={addToCart}
+            />
+            <Item
+              name="T-Shirt 2"
+              description="galli boy t shirt."
+              price={24.99}
+              addToCart={addToCart}
+            />
+            <Item
+              name="T-Shirt 3"
+              description="sky high t shirt."
+              price={29.99}
+              addToCart={addToCart}
+            />
+          </>
         )}
-        <Routes>
-          <Route
-            path="/"
-             element={isLoggedIn ? <ProductsScreen productsArr={productsArr} /> : <Navigate to="/login" />}
-          />
-          <Route path="/product/:id" element={<ProductPage productsArr={productsArr} />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/contact" element={<ContactForm />} />
-          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-        </Routes>
-      </CartProvider>
-    </BrowserRouter>
+        {isCartOpen && <Cart cartItems={cartItems} onClose={toggleCart} />}
+      </CartContext.Provider>
+    </div>
   );
 };
 

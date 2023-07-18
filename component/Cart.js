@@ -1,22 +1,42 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import React, { useContext } from 'react';
-import CartItem from './A';
-import { CartContext } from './CartContext';
+const Cart = ({ cartItems, onClose }) => {
+  const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
 
-const Cart = () => {
-  const { cartItems } = useContext(CartContext);
-
-  return (
-    <div className="cart">
-      <h2 className="text-center mb-4">Cart</h2>
-      <button className='position-fixed mt-5 border border-orange bg-green top-0 end-0'> close</button>
-      <div className="cart-items">
-        {cartItems.map((item, index) => (
-          <CartItem key={index} item={item} />
-        ))}
+  return ReactDOM.createPortal(
+    <div className="container cart-portal" onClick={onClose}>
+      <div className="cart card">
+        <button className="btn btn-link btn-close">
+          <i className="bi bi-x"></i>
+        </button>
+        <h3 className="cart-title">Items in Cart:</h3>
+        <ul className="cart-items list-group">
+          {cartItems.map((item, index) => (
+            <li key={index} className="cart-item list-group-item">
+              <div className="item-details">
+                <span>{item.name}</span>
+                <span>{item.size}</span>
+              </div>
+              <span className="item-price">${item.price.toFixed(2)}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="cart-summary">
+          <span className="total-amount">
+            Total Amount: ${totalPrice.toFixed(2)}
+          </span>
+        </div>
+        <div className="cart-buttons d-flex justify-content-between">
+          <button className="btn btn-primary btn-buy">Buy</button>
+          <button onClick={onClose} className="btn btn-secondary btn-cancel">
+            Cancel
+          </button>
+        </div>
       </div>
-    </div>
+    </div>,
+    document.getElementById('cart-portal')
   );
-}
+};
 
 export default Cart;
