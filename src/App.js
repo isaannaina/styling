@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AuthForm from './component/LogInPage';
@@ -7,8 +6,14 @@ import ProfileUpdatePage from './component/ContactForm';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const loginHandler = () => {
+  const handleLogin = (userData) => {
+    // Perform email verification using the user details
+
+    console.log(userData);
+
+    setUser(userData);
     setIsLoggedIn(true);
   };
 
@@ -17,19 +22,24 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={isLoggedIn ? <Navigate to="/about-us" /> : <AuthForm onLogin={loginHandler} />}
+          element={isLoggedIn ? <Navigate to="/about-us" /> : <AuthForm onLogin={handleLogin} />}
         />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/contact-detail" element={<ProfileUpdatePage/>}></Route>
+        <Route
+          path="/about-us"
+          element={
+            isLoggedIn ? (
+              <AboutUs user={user}  />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route path="/contact-detail" element={<ProfileUpdatePage />} />
       </Routes>
     </Router>
   );
 };
 
 export default App;
-
-
-
-
 
 
