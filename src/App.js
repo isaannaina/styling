@@ -16,9 +16,18 @@ const App = () => {
     setUser(userData);
     setIsLoggedIn(true);
   };
-
+  const handleLogout = () => {
+    // Clear the idToken stored in local storage
+    localStorage.removeItem('idToken');
+    setIsLoggedIn(false);
+  };
   return (
     <Router>
+       {isLoggedIn && (
+          <button onClick={handleLogout} style={{ position: 'absolute', right: 20, top: 20 }}>
+            Logout
+          </button>
+        )}
       <Routes>
         <Route
           path="/"
@@ -41,5 +50,3 @@ const App = () => {
 };
 
 export default App;
-
-
