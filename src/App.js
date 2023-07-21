@@ -9,7 +9,7 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   const handleLogin = (userData) => {
-    // Perform email verification using the user details
+    
 
     console.log(userData);
 
@@ -17,7 +17,6 @@ const App = () => {
     setIsLoggedIn(true);
   };
   const handleLogout = () => {
-    // Clear the idToken stored in local storage
     localStorage.removeItem('idToken');
     setIsLoggedIn(false);
   };
