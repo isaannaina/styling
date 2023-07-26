@@ -1,15 +1,15 @@
+
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AuthForm from './component/LogInPage';
 import AboutUs from './component/AbooutUs';
 import ProfileUpdatePage from './component/ContactForm';
-
+import ExpenseTracker from './component/ExpenseTracker';
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
   const handleLogin = (userData) => {
-    
 
     console.log(userData);
 
@@ -42,6 +42,7 @@ const App = () => {
             )
           }
         />
+         <Route path="/expense" element={<ExpenseTracker />} />
         <Route path="/contact-detail" element={<ProfileUpdatePage />} />
       </Routes>
     </Router>
