@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import VerifyEmailButton from './VerifyEmailButton';
-import './AboutUs.css'; 
+import './AboutUs.css'; // Import the custom CSS file
 
 const AboutUs = ({ user }) => {
   console.log(user);
@@ -33,6 +33,3 @@ const AboutUs = ({ user }) => {
 };
 
 export default AboutUs;
-
-
-

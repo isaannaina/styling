@@ -1,5 +1,3 @@
-
-
 import React from "react";
 
 const ExpenseList = ({ expenses }) => {
@@ -22,12 +20,3 @@ const ExpenseList = ({ expenses }) => {
 };
 
 export default ExpenseList;
-
-
-
-
-
-
-
-
-
