@@ -1,30 +1,24 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux'; 
-import AuthForm from './component/LogInPage'; 
-import AboutUs from './component/AbooutUs'; 
-import ProfileUpdatePage from './component/ContactForm';
-import ExpenseTracker from './component/ExpenseTracker'; 
+import { useSelector,  } from 'react-redux';
+import Counter from './components/Counter';
+import Auth from './components/Auth';
+import Header from './components/Header';
+import UserProfile from './components/UserProfile';
 
-const App = () => {
-  const accessToken = useSelector((state) => state.auth.accessToken);
-
+function App() {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
   return (
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={<AuthForm />}
-          />
-          <Route
-            path="/about-us"
-            element={<AboutUs />}
-          />
-          <Route path="/contact-detail" element={<ProfileUpdatePage  accessToken={accessToken}/>} />
-          <Route path="/expense" element={<ExpenseTracker />} />
-        </Routes>
-      </Router>
+    <div>
+      <Header />
+      {isLoggedIn ? (
+        <>
+          <UserProfile />
+        </>
+      ) : (
+        <Auth />
+      )}
+      <Counter />
+    </div>
   );
-};
+}
 
 export default App;
