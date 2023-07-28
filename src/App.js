@@ -1,11 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-//import { Provider } from 'react-redux';
-import { useSelector } from 'react-redux'; // Import useSelector hook to access Redux store
-import AuthForm from './component/LogInPage'; // Corrected the import path
-import AboutUs from './component/AbooutUs'; // Corrected the import path
-import ProfileUpdatePage from './component/ContactForm'; // Corrected the import path
-import ExpenseTracker from './component/ExpenseTracker'; // Corrected the import path
+import { useSelector } from 'react-redux'; 
+import AuthForm from './component/LogInPage'; 
+import AboutUs from './component/AbooutUs'; 
+import ProfileUpdatePage from './component/ContactForm';
+import ExpenseTracker from './component/ExpenseTracker'; 
 
 const App = () => {
   const accessToken = useSelector((state) => state.auth.accessToken);

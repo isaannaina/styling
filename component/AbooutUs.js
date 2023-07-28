@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // Import useSelector hook to access Redux store
+import { useSelector } from 'react-redux'; 
 import VerifyEmailButton from './VerifyEmailButton';
 import './AboutUs.css';
 
 const AboutUs = () => {
-  // Use useSelector hook to access the user and accessToken from the Redux store
   const user = useSelector((state) => state.auth.user);
   const accessToken = useSelector((state) => state.auth.accessToken);
 
@@ -13,7 +12,7 @@ const AboutUs = () => {
   return (
     <div className="container">
       <div className="row mt-5 align-items-center">
-        {/* First section */}
+        
         <div className="col-md-6 text-center text-md-left">
           <h2 className="display-4">Welcome To Expense Tracker</h2>
           <p className="lead">Your profile is not complete.</p>
@@ -32,13 +31,12 @@ const AboutUs = () => {
            
         </div>
       </div>
-      {/* Second section - email verification */}
+  
       { 
         <div>
 
           <h3>Verify Your E-mail Please</h3>
           <div className="row justify-content-center mt-4">
-            {/* Pass the accessToken along with the user prop */}
             <VerifyEmailButton user={user} accessToken={accessToken} />
           </div>
         </div>
