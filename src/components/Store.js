@@ -1,27 +1,33 @@
+import { createSlice, configureStore } from '@reduxjs/toolkit';
 
-
-import { createStore } from "redux";
-
-// Define initial state
 const initialState = {
   counter: 0,
+  isLoggedIn: false,
 };
 
-// Reducer function to handle state changes
-const counterReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'INCREMENT':
-      return { ...state, counter: state.counter +5};
-    case 'DECREMENT':
-      return { ...state, counter: state.counter -5 };
-    default:
-      return state;
-  }
-};
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState,
+  reducers: {
+    increment(state) {
+      state.counter += 5;
+    },
+    decrement(state) {
+      state.counter -= 5;
+    },
+    login(state) {
+      state.isLoggedIn = true;
+    },
+    logout(state) {
+      state.isLoggedIn = false;
+    },
+  },
+});
 
-// Create the Redux store
-const store = createStore(counterReducer);
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+
+export const { increment, decrement, login, logout } = counterSlice.actions;
 
 export default store;
-
-
