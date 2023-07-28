@@ -1,14 +1,13 @@
-
 import React, { useState } from 'react';
-const VerifyEmailButton = ({ user }) => {
+const VerifyEmailButton = ({ accessToken,user}) => {
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [error, setError] = useState(null);
   const sendVerificationEmail = async () => {
     setIsSendingEmail(true);
     setError(null);
     try {
-      console.log(user)
-      if (!user || !user.idToken) {
+      console.log(accessToken)
+      if (!accessToken||!user) {
         throw new Error('User information is missing.');
       }
       const response = await fetch(
@@ -20,7 +19,7 @@ const VerifyEmailButton = ({ user }) => {
           },
           body: JSON.stringify({
             requestType: 'VERIFY_EMAIL',
-            idToken: user.idToken,
+            idToken: accessToken
           }),
         }
       );
@@ -29,6 +28,7 @@ const VerifyEmailButton = ({ user }) => {
         const errorData = await response.json();
         throw new Error(errorData.error.message);
       }
+      alert('A password reset link has been sent to your email. Please check your inbox.');
 
   
       setIsSendingEmail(false);
@@ -39,8 +39,8 @@ const VerifyEmailButton = ({ user }) => {
   };
  
   return (
-    <div>
-      <button onClick={sendVerificationEmail} disabled={isSendingEmail}>
+    <div >
+      <button  className="btn btn-warning" onClick={sendVerificationEmail} disabled={isSendingEmail}>
         Verify Email
       </button>
       {error && <p>Error: {error}</p>}
@@ -48,4 +48,4 @@ const VerifyEmailButton = ({ user }) => {
   );
 };
 
-export default VerifyEmailButton
+export default VerifyEmailButton;
