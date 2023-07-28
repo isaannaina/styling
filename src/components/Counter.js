@@ -19,16 +19,11 @@ const Counter = () => {
     <main className={classes.counter}>
       <h1>Redux Counter</h1>
       <div className={classes.value}>{counter}</div>
-      <div><button onClick={decrementhandler}>inrement</button>
-     <button onClick={incrementhandler}>decrement</button></div>
+      <div><button onClick={decrementhandler}>decrement by 5</button>
+     <button onClick={incrementhandler}>increment by 5</button></div>
       <button onClick={toggleCounterHandler}>Toggle Counter</button>
     </main>
   );
 };
 
 export default Counter;
-
-
-
-
-

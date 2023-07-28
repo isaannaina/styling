@@ -1,4 +1,5 @@
-redux part1 code=
+
+
 import { createStore } from "redux";
 
 // Define initial state
@@ -10,9 +11,9 @@ const initialState = {
 const counterReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'INCREMENT':
-      return { ...state, counter: state.counter + 5 };
+      return { ...state, counter: state.counter +5};
     case 'DECREMENT':
-      return { ...state, counter: state.counter - 1 };
+      return { ...state, counter: state.counter -5 };
     default:
       return state;
   }
@@ -22,3 +23,5 @@ const counterReducer = (state = initialState, action) => {
 const store = createStore(counterReducer);
 
 export default store;
+
+
