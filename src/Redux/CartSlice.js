@@ -1,4 +1,4 @@
-// src/redux/cartSlice.js
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {

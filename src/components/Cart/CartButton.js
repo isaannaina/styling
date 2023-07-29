@@ -1,4 +1,4 @@
-// src/components/CartButton.js
+
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleCart } from '../../Redux/CartSlice';
 import classes from './CartButton.module.css';

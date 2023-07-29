@@ -1,4 +1,3 @@
-// src/components/Shop/ProductItem.js
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../Redux/CartSlice';
 import Card from '../UI/Card';
@@ -10,6 +9,31 @@ const ProductItem = (props) => {
 
   const addToCartHandler = () => {
     dispatch(addToCart({ id, title, price }));
+    const expense = {
+      id,
+      title,
+      price,
+    };
+
+    fetch('https://expense-tracker-4e143-default-rtdb.firebaseio.com/expenses.json', {
+      method: 'POST',
+      body: JSON.stringify(expense),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to add expense to the database.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Expense added to the database:', data);
+      })
+      .catch((error) => {
+        console.error('Error adding expense:', error.message);
+      });
   };
 
   return (

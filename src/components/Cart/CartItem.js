@@ -1,10 +1,7 @@
-// src/components/Cart/CartItem.js
+
 import { useDispatch } from 'react-redux';
 import { removeFromCart, increaseQuantity, decreaseQuantity } from '../../Redux/CartSlice';
 import classes from './CartItem.module.css';
-// src/components/Cart/CartItem.js
-// ... (your imports and other code)
-
 const CartItem = (props) => {
   const { id, title, quantity, total, price } = props.item;
   const dispatch = useDispatch();

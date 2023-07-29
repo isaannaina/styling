@@ -1,4 +1,3 @@
-// Products.js
 import ProductItem from './ProductItem';
 import classes from './Products.module.css';
 
