@@ -1,13 +1,39 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
+import { MemoryRouter, Route } from 'react-router-dom';
+import fetchMock from 'jest-fetch-mock';
 import store from './store';
 import App from './App';
 import AuthForm from './AuthForm';
 import AboutUs from './AboutUs';
 
+// Mock API response data for authentication
+const mockAuthResponse = (email, idToken) => ({
+  kind: 'identitytoolkit#VerifyPasswordResponse',
+  localId: 'test_user_id',
+  email,
+  idToken,
+  refreshToken: 'test_refresh_token',
+  expiresIn: '3600',
+});
+
+// Mock API response data for expenses
+const mockExpensesResponse = [
+  { id: '1', title: 'Expense 1', amount: 100 },
+  { id: '2', title: 'Expense 2', amount: 200 },
+  { id: '3', title: 'Expense 3', amount: 300 },
+];
+
+// Mock API response data for password reset
+const mockPasswordResetResponse = { email: 'test@example.com', kind: 'identitytoolkit#GetOobConfirmationCodeResponse' };
+
 describe('App', () => {
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
   test('renders learn react link', () => {
     render(<App />);
     const linkElement = screen.getByText(/learn react/i);
@@ -16,6 +42,10 @@ describe('App', () => {
 });
 
 describe('AuthForm', () => {
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
   test('should switch between Login and Sign Up form', () => {
     render(<AuthForm />);
     const switchButton = screen.getByText(/Create new account/i);
@@ -82,6 +112,8 @@ describe('AuthForm', () => {
     userEvent.type(emailInput, 'test@example.com');
     userEvent.type(passwordInput, 'password123');
 
+    fetchMock.mockResponseOnce(JSON.stringify(mockAuthResponse('test@example.com', 'test_token')));
+
     userEvent.click(submitButton);
 
     await waitFor(() => {
@@ -98,6 +130,26 @@ describe('AuthForm', () => {
     const emailInput = screen.getByLabelText(/Email/i);
     userEvent.type(emailInput, 'test@example.com');
 
+    fetchMock.mockResponseOnce(JSON.stringify(mockPasswordResetResponse));
+
+    const sendButton = screen.getByText(/Send/i);
+    userEvent.click(sendButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/A password reset link has been sent to your email. Please check your inbox./i)).toBeInTheDocument();
+    });
+  });
+
+  test('should display a success message for password reset', async () => {
+    render(<AuthForm />);
+    const forgetPasswordButton = screen.getByText(/Forgot Password?/i);
+    userEvent.click(forgetPasswordButton);
+
+    const emailInput = screen.getByLabelText(/Email/i);
+    userEvent.type(emailInput, 'test@example.com');
+
+    fetchMock.mockResponseOnce(JSON.stringify(mockPasswordResetResponse));
+
     const sendButton = screen.getByText(/Send/i);
     userEvent.click(sendButton);
 
@@ -108,6 +160,10 @@ describe('AuthForm', () => {
 });
 
 describe('AboutUs', () => {
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
   test('should not display a logout button when not logged in', () => {
     render(<AboutUs />);
     expect(screen.queryByText(/Logout/i)).not.toBeInTheDocument();
@@ -142,5 +198,111 @@ describe('AboutUs', () => {
     store.dispatch({ type: 'auth/login', payload: { user: { email: 'test@example.com' }, accessToken: 'test_token' } });
 
     expect(screen.getByText(/Verify Your E-mail Please/i)).toBeInTheDocument();
+  });
+});
+
+describe('Expense Tracker', () => {
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
+  test('should display expenses correctly', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(mockExpensesResponse));
+
+    render(<Provider store={store}><App /></Provider>);
+    store.dispatch({ type: 'auth/login', payload: { user: { email: 'test@example.com' }, accessToken: 'test_token' } });
+
+    const expensesList = await screen.findAllByTestId('expense-item');
+    expect(expensesList).toHaveLength(3);
+    expect(expensesList[0]).toHaveTextContent('Expense 1');
+    expect(expensesList[1]).toHaveTextContent('Expense 2');
+    expect(expensesList[2]).toHaveTextContent('Expense 3');
+  });
+
+  test('should add a new expense', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(mockExpensesResponse));
+
+    render(<Provider store={store}><App /></Provider>);
+    store.dispatch({ type: 'auth/login', payload: { user: { email: 'test@example.com' }, accessToken: 'test_token' } });
+
+    const addButton = screen.getByText(/Add Expense/i);
+    userEvent.click(addButton);
+
+    const titleInput = screen.getByLabelText(/Title/i);
+    const amountInput = screen.getByLabelText(/Amount/i);
+    const saveButton = screen.getByText(/Save/i);
+
+    userEvent.type(titleInput, 'New Expense');
+    userEvent.type(amountInput, '123');
+
+    fetchMock.mockResponseOnce(JSON.stringify({ id: '4', title: 'New Expense', amount: 123 }));
+    
+    userEvent.click(saveButton);
+
+    await waitFor(() => {
+      const newExpenseItem = screen.getByText(/New Expense/i);
+      expect(newExpenseItem).toBeInTheDocument();
+    });
+  });
+
+  test('should delete an expense', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(mockExpensesResponse));
+
+    render(<Provider store={store}><App /></Provider>);
+    store.dispatch({ type: 'auth/login', payload: { user: { email: 'test@example.com' }, accessToken: 'test_token' } });
+
+    const expensesList = await screen.findAllByTestId('expense-item');
+    expect(expensesList).toHaveLength(3);
+
+    const deleteButton = expensesList[0].querySelector('button');
+    fetchMock.mockResponseOnce(JSON.stringify({ success: true }));
+    
+    userEvent.click(deleteButton);
+
+    await waitFor(() => {
+      expect(screen.queryByText(/Expense 1/i)).not.toBeInTheDocument();
+    });
+  });
+
+  test('should display an error message for failed expense deletion', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(mockExpensesResponse));
+
+    render(<Provider store={store}><App /></Provider>);
+    store.dispatch({ type: 'auth/login', payload: { user: { email: 'test@example.com' }, accessToken: 'test_token' } });
+
+    const expensesList = await screen.findAllByTestId('expense-item');
+    expect(expensesList).toHaveLength(3);
+
+    const deleteButton = expensesList[0].querySelector('button');
+    fetchMock.mockReject(new Error('Failed to delete expense'));
+    
+    userEvent.click(deleteButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Failed to delete expense/i)).toBeInTheDocument();
+    });
+  });
+});
+
+describe('Theme', () => {
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
+  test('should change the theme', () => {
+    render(<Provider store={store}><App /></Provider>);
+    store.dispatch({ type: 'auth/login', payload: { user: { email: 'test@example.com' }, accessToken: 'test_token' } });
+
+    const themeToggleButton = screen.getByTestId('theme-toggle-button');
+
+    expect(screen.getByTestId('light-theme')).toBeInTheDocument();
+
+    userEvent.click(themeToggleButton);
+
+    expect(screen.getByTestId('dark-theme')).toBeInTheDocument();
+
+    userEvent.click(themeToggleButton);
+
+    expect(screen.getByTestId('light-theme')).toBeInTheDocument();
   });
 });
