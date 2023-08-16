@@ -1,0 +1,38 @@
+
+
+.email {
+    background-color: rgb(140, 146, 236);
+    padding: 10px;
+  }
+  
+  .email .navbar-brand {
+    font-size: 36px;
+    color: rgb(5, 4, 4);
+    font-family: "Arial", sans-serif;
+    font-weight: bold;
+  }
+  
+  .email .form-inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .email .form-control {
+    width: 300px;
+    margin-right: 10px;
+    font-family: "Arial", sans-serif;
+    font-size: 18px;
+  }
+  
+  .email .btn-outline-primary {
+    margin-top: 10px;
+  }
+  
+
+  .email .container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
