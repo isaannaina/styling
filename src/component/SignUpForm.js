@@ -1,4 +1,3 @@
-// SignUpForm.js
 import React, { useState } from 'react';
 import { Form, Button, Alert, Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -12,14 +11,11 @@ const navigate=useNavigate()
   const handleSignUp = async (e) => {
   
     e.preventDefault();
-
-    // Ensure all fields are filled
     if (!email || !password || !confirmPassword) {
       setError('All fields are mandatory');
       return;
     }
 
-    // Ensure password and confirm password match
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
