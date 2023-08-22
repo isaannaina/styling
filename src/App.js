@@ -1,35 +1,9 @@
-
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SignUpForm from './component/SignUpForm';
-import AuthForm from './component/LogInPage';
-import MailPage from './component/EmailPage/MailPage';
-const App = () => {
-  
+function App() {
   return (
-      <Router>
-        <Routes>
-          <Route
-            path="/login-page"
-            element={<SignUpForm/>}
-          />
-          <Route
-            path="/"
-            element={<AuthForm/>}
-          />
-         <Route
-            path="/about-us"
-            element={<MailPage/>}
-          />
-        </Routes>
-      </Router>
+    <div>
+      <h2>Let's get started!</h2>
+    </div>
   );
-};
+}
 
 export default App;
-
-
-
-
-
-
