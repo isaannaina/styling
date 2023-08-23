@@ -1,5 +1,6 @@
+// pages/aboutus/[id].js
 
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const details = [
   { id: 1, name: 'Yash', role: 'Senior Developer' },
@@ -7,21 +8,24 @@ const details = [
   { id: 3, name: 'Suresh', role: 'Frontend Developer' },
 ];
 
-function AboutUs() {
+function AboutUsDetail() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  // Find the team member details based on the ID
+  const member = details.find(member => member.id === parseInt(id));
+
+  // Display the details or "Developer doesn't exist"
+  if (!member) {
+    return <div>Developer doesn't exist</div>;
+  }
+
   return (
     <div>
-      <h1>About Us</h1>
-      <ul>
-        {details.map(member => (
-          <li key={member.id}>
-            <Link href={`/aboutus/${member.id}`}>
-              <a>{member.name}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <h1>{member.name}</h1>
+      <p>{member.role}</p>
     </div>
   );
 }
 
-export default AboutUs;
+export default AboutUsDetail;

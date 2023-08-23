@@ -1,3 +1,5 @@
+// pages/aboutus.js
+
 import Link from 'next/link';
 
 const details = [
@@ -14,7 +16,7 @@ function AboutUs() {
         {details.map(member => (
           <li key={member.id}>
             <Link href={`/aboutus/${member.id}`}>
-              <a>{member.name}</a>
+              <span className="clickable-text">{member.name}</span>
             </Link>
           </li>
         ))}
