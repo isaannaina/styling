@@ -14,7 +14,7 @@ function HomePage() {
       image: 'image-url-2',
       address: '456 Elm St, Town',
     },
-    // Add more dummy meetups as needed
+
   ];
 
   return (
