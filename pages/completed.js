@@ -1,4 +1,4 @@
-// pages/completed.js
+
 import { useState, useEffect } from 'react';
 
 const Completed = () => {

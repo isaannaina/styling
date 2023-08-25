@@ -1,4 +1,3 @@
-// pages/api/deleteTask.js
 import { connectDatabase, getDatabase } from './db';
 
 export default async (req, res) => {

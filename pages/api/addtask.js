@@ -1,4 +1,4 @@
-// pages/api/addTask.js
+
 import { connectDatabase, getDatabase } from './db';
 
 export default async (req, res) => {

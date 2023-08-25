@@ -1,4 +1,3 @@
-// pages/today.js
 import { useState, useEffect } from 'react';
 
 const Today = () => {
