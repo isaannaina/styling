@@ -1,28 +1,82 @@
-import MeetupList from "../components/meetups/MeetupList"
+// pages/index.js
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
-function HomePage() {
-  const DUMMY_MEETUPS = [
-    {
-      id: 'm1',
-      title: 'First Meetup',
-      image: 'image-url-1',
-      address: '123 Main St, City',
-    },
-    {
-      id: 'm2',
-      title: 'Second Meetup',
-      image: 'image-url-2',
-      address: '456 Elm St, Town',
-    },
+const Home = () => {
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState('');
 
-  ];
+  useEffect(() => {
+    fetch('/api/getTasks')
+      .then(response => response.json())
+      .then(data => setTasks(data));
+  }, []);
+
+  const addTask = () => {
+    fetch('/api/addTask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ task: newTask }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === 'Task added successfully.') {
+        setTasks([...tasks, { task: newTask, completed: false }]);
+        setNewTask('');
+      }
+    });
+  };
+
+  const markComplete = (id) => {
+    fetch(`/api/updateTask?id=${id}`, { method: 'PATCH' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Task updated successfully.') {
+          const updatedTasks = tasks.map(task =>
+            task._id === id ? { ...task, completed: true } : task
+          );
+          setTasks(updatedTasks);
+        }
+      });
+  };
+
+  const deleteTask = (id) => {
+    fetch(`/api/deleteTask?id=${id}`, { method: 'DELETE' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Task deleted successfully.') {
+          const updatedTasks = tasks.filter(task => task._id !== id);
+          setTasks(updatedTasks);
+        }
+      });
+  };
 
   return (
-    <section>
-      <h1>Meetup List</h1>
-      <MeetupList meetups={DUMMY_MEETUPS} />
-    </section>
+    <div>
+      <h1>Todo App</h1>
+      <input
+        type="text"
+        value={newTask}
+        onChange={(e) => setNewTask(e.target.value)}
+      />
+      <button onClick={addTask}>Add Task</button>
+      <ul>
+        {tasks.map(task => (
+          <li key={task._id}>
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={() => markComplete(task._id)}
+            />
+            {task.task}
+            <button onClick={() => deleteTask(task._id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+      <Link href="/today"><a>Today's Tasks</a></Link>
+      <Link href="/completed"><a>Completed Tasks</a></Link>
+    </div>
   );
-}
+};
 
-export default HomePage;
+export default Home;
