@@ -27,7 +27,7 @@ const Home = () => {
   };
   
   const markComplete = (id) => {
-    fetch(`/api/updateTask?id=${id}`, { method: 'PUT' }) // Use PUT method
+    fetch(`/api/updateTask?id=${id}`, { method: 'PUT' }) 
       .then(response => response.json())
       .then(data => {
         if (data.message === 'Task marked as complete.') {
