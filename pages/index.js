@@ -26,12 +26,11 @@ const Home = () => {
     });
   };
   
-
   const markComplete = (id) => {
-    fetch(`/api/updateTask?id=${id}`, { method: 'PATCH' })
+    fetch(`/api/updateTask?id=${id}`, { method: 'PUT' }) // Use PUT method
       .then(response => response.json())
       .then(data => {
-        if (data.message === 'Task updated successfully.') {
+        if (data.message === 'Task marked as complete.') {
           const updatedTasks = tasks.map(task =>
             task._id === id ? { ...task, completed: true } : task
           );
@@ -39,8 +38,7 @@ const Home = () => {
         }
       });
   };
-
-  const deleteTask = (id) => {
+    const deleteTask = (id) => {
     fetch(`/api/deleteTask?id=${id}`, { method: 'DELETE' })
       .then(response => response.json())
       .then(data => {
