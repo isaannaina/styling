@@ -15,7 +15,7 @@ const Home = () => {
     fetch('/api/addTask', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ task: newTask }),
+      body: JSON.stringify({ task: newTask, completed: false }), 
     })
     .then(response => response.json())
     .then(data => {
@@ -25,6 +25,7 @@ const Home = () => {
       }
     });
   };
+  
 
   const markComplete = (id) => {
     fetch(`/api/updateTask?id=${id}`, { method: 'PATCH' })
